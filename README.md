@@ -4,7 +4,7 @@ The Smart Air Pollution Monitoring System is designed to provide real-time data 
 
 Collected data is sent to ThingSpeak, an IoT analytics platform, where it is stored and processed. To enhance accessibility and user interaction, we developed a dedicated website that displays the monitored values in an intuitive and user-friendly interface. Users can register on the website to receive timely alerts via email when the air quality index falls below acceptable levels, ensuring prompt awareness and response to potential health hazards.
 
-**Components Used:
+_Components Used_:
 
 NodeMCU-ES8266<br>
 Temperature Sensor(LM35)<br>
