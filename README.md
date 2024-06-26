@@ -1,17 +1,18 @@
 # Air-Pollution-Monitoring-System-Using-IOT-
 
 The Smart Air Pollution Monitoring System is designed to provide real-time data on air quality and environmental conditions using advanced sensing technology. The system employs an MQ135 sensor to detect air pollutants such as ammonia (NH3), benzene, sulfur compounds, and carbon dioxide (CO2). Additionally, it integrates temperature and moisture sensors to monitor ambient temperature and humidity levels. The core of the system is powered by the NodeMCU ESP8266, a microcontroller board that facilitates data transmission to the cloud.
+
 Collected data is sent to ThingSpeak, an IoT analytics platform, where it is stored and processed. To enhance accessibility and user interaction, we developed a dedicated website that displays the monitored values in an intuitive and user-friendly interface. Users can register on the website to receive timely alerts via email when the air quality index falls below acceptable levels, ensuring prompt awareness and response to potential health hazards.
 
 #Components Used:
 
-NodeMCU-ES8266
-Temperature Sensor(LM 35)
-Moisture Sensor
-MQ135 Sensor-For detecting the air quality in ppm
-Jumper Wires
-Bread Board
-USB Cable
+NodeMCU-ES8266.
+Temperature Sensor(LM 35).
+Moisture Sensor.
+MQ135 Sensor-For detecting the air quality in ppm.
+Jumper Wires.
+Bread Board.
+USB Cable.
 
 
 #Reqiurements:
