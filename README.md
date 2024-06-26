@@ -4,52 +4,52 @@ The Smart Air Pollution Monitoring System is designed to provide real-time data 
 
 Collected data is sent to ThingSpeak, an IoT analytics platform, where it is stored and processed. To enhance accessibility and user interaction, we developed a dedicated website that displays the monitored values in an intuitive and user-friendly interface. Users can register on the website to receive timely alerts via email when the air quality index falls below acceptable levels, ensuring prompt awareness and response to potential health hazards.
 
-#Components Used:
+Components Used:
 
 NodeMCU-ES8266<br>
-Temperature Sensor(LM 35).
-Moisture Sensor.
-MQ135 Sensor-For detecting the air quality in ppm.
-Jumper Wires.
-Bread Board.
-USB Cable.
+Temperature Sensor(LM35)<br>
+Moisture Sensor<br>
+MQ135 Sensor-For detecting the air quality in ppm<br>
+Jumper Wires<br>
+Bread Board<br>
+USB Cable<br>
 
 
-#Reqiurements:
+Reqiurements:
 
-1.	Hardware Setup:
-•	Connect the NodeMCU ESP8266 with MQ135 and other sensors.
-•	Program the NodeMCU using Arduino IDE to read sensor data and send it to ThingSpeak.
-2.	Cloud Integration:
-•	Create ThingSpeak account.
-•	Set up ThingSpeak channels for data collection.
-•	Configure the NodeMCU to transmit data to ThingSpeak.
-4.	Web Development:
-•	Develop the frontend for the web application.
-•	Implement backend services for data fetching, user authentication, and alert management.
-•	Integrate ThingSpeak API to fetch and display data.
-5.	User Alerts:
-•	Set up email services for sending alerts.
-•	Implement backend logic to monitor data and trigger alerts.
+1.	Hardware Setup:<br>
+•	Connect the NodeMCU ESP8266 with MQ135 and other sensors.<br>
+•	Program the NodeMCU using Arduino IDE to read sensor data and send it to ThingSpeak.<br>
+2.	Cloud Integration:<br>
+•	Create ThingSpeak account.<br>
+•	Set up ThingSpeak channels for data collection.<br>
+•	Configure the NodeMCU to transmit data to ThingSpeak.<br>
+4.	Web Development:<br>
+•	Develop the frontend for the web application.<br>
+•	Implement backend services for data fetching, user authentication, and alert management.<br>
+•	Integrate ThingSpeak API to fetch and display data.<br>
+5.	User Alerts:<br>
+•	Set up email services for sending alerts.<br>
+•	Implement backend logic to monitor data and trigger alerts.<br>
 
-#Connections:
+Connections:
 
-LM35 Temperature:
-VCC -> 3.3V (NodeMCU's 3.3V pin)
-GND -> GND
-Data -> Analog pin (A0)
+LM35 Temperature:<br>
+VCC -> 3.3V (NodeMCU's 3.3V pin)<br>
+GND -> GND<br>
+Data -> Analog pin (A0)<br>
 
-Moisture Sensor:
-VCC -> 3.3V (NodeMCU's 3.3V pin)
-GND -> GND
-Data -> Analog pin (A0)
+Moisture Sensor:<br>
+VCC -> 3.3V (NodeMCU's 3.3V pin)<br>
+GND -> GND<br>
+Data -> Analog pin (A0)<br>
 
-MQ135 Gas Sensor:
-VCC -> 3.3V or 5V (Use NodeMCU's 3.3V pin)
-GND -> GND
-Data -> Analog pin (A0)
+MQ135 Gas Sensor:<br>
+VCC -> 3.3V or 5V (Use NodeMCU's 3.3V pin)<br>
+GND -> GND<br>
+Data -> Analog pin (A0)<br>
 
-NodeMCU:
-Connect NodeMCU to laptop via USB.
+NodeMCU:<br>
+Connect NodeMCU to laptop via USB.<br>
 
 
