@@ -4,7 +4,7 @@ The Smart Air Pollution Monitoring System is designed to provide real-time data 
 
 Collected data is sent to ThingSpeak, an IoT analytics platform, where it is stored and processed. To enhance accessibility and user interaction, we developed a dedicated website that displays the monitored values in an intuitive and user-friendly interface. Users can register on the website to receive timely alerts via email when the air quality index falls below acceptable levels, ensuring prompt awareness and response to potential health hazards.
 
-Components Used:
+##Components Used:
 
 NodeMCU-ES8266<br>
 Temperature Sensor(LM35)<br>
@@ -15,7 +15,7 @@ Bread Board<br>
 USB Cable<br>
 
 
-Reqiurements:
+##Reqiurements:
 
 1.	Hardware Setup:<br>
 •	Connect the NodeMCU ESP8266 with MQ135 and other sensors.<br>
@@ -32,7 +32,7 @@ Reqiurements:
 •	Set up email services for sending alerts.<br>
 •	Implement backend logic to monitor data and trigger alerts.<br>
 
-Connections:
+##Connections:
 
 LM35 Temperature:<br>
 VCC -> 3.3V (NodeMCU's 3.3V pin)<br>
