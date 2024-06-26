@@ -9,11 +9,11 @@
 
 MQ135 gasSensor(MQ135_PIN); // MQ135 gas sensor initialization
 
-const char* ssid = "SSN";
-const char* password = "Ssn1!Som2@Sase3#";
+const char* ssid = "ReplaceWifiName";
+const char* password = "ReplaceWifiPassword";
 
 const char* server = "api.thingspeak.com";
-const String apiKey = "ZUCOKBJQF9D4LDYP";
+const String apiKey = "Replaceapikey";
 
 WiFiClient client;
 
