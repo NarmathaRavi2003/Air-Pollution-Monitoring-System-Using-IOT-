@@ -40,4 +40,6 @@ Data -> Analog pin (A0)<br>
 NodeMCU:<br>
 Connect NodeMCU to laptop via USB.<br>
 
-
+After all the above process run app.py
+Make sure that should login to the page so that get an email alert when air quality is bad
+In command prompt run the alir_quality_alert.py file
