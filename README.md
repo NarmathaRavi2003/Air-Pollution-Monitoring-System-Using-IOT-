@@ -6,7 +6,7 @@ Collected data is sent to ThingSpeak, an IoT analytics platform, where it is sto
 
 #Components Used:
 
-NodeMCU-ES8266.
+NodeMCU-ES8266<br>
 Temperature Sensor(LM 35).
 Moisture Sensor.
 MQ135 Sensor-For detecting the air quality in ppm.
