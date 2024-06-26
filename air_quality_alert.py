@@ -32,8 +32,8 @@ def get_user_emails():
 
 # Function to send an email alert
 def send_email_alert(to_email, air_quality):
-    from_email = 'airpollutionmonitoring20@gmail.com'
-    email_password = 'sjbi ynpb tcwf wzew'
+    from_email = 'gmailaccount'
+    email_password = 'password(16) after 2 step verification'
     smtp_server = 'smtp.gmail.com'
     smtp_port = 465
 
