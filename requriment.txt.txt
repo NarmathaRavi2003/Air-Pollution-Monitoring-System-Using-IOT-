@@ -1,0 +1,8 @@
+Create a new account in thingspeak(https://thingspeak.com/login?skipSSOCheck=true)
+Create a new gmail account then do the following
+	1.Go to security
+	2.Complete the 2 step Verification
+	3.Turn on 2 step Verification
+	4.Go to https://myaccount.google.com/u/4/apppassword
+	5.In select app,choose others then write any name then click on generate
+	6.copy the password and paste it in the air_pollution_iot.ino file
