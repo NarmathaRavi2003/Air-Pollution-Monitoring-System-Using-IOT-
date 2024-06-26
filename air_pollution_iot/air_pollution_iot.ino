@@ -13,7 +13,7 @@ const char* ssid = "ReplaceWifiName";
 const char* password = "ReplaceWifiPassword";
 
 const char* server = "api.thingspeak.com";
-const String apiKey = "Replaceapikey";
+const String apiKey = "ZUCOKBJQF9D4LDYP";
 
 WiFiClient client;
 
