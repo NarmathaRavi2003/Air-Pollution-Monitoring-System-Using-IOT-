@@ -1,1 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Air Pollution Monitoring Dashboard</title>
+    <style>
+        /* Basic styling for the dashboard */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: url('/static/Thiruveduu.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            color: #fff;
+        }
+        .anim-body {
+            width: 100%;
+            height: 100vh;
+            position: relative;
+            background: url('/static/Thiruveduu.jpg');
+            background-size: cover;
+        }
+
+        .fog-anim {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            background: url('/static/fog.jpg') repeat-x;
+            background-size: 200% auto;
+            background-position: 0 bottom;
+            animation: fadeOut 8s; /* Fade out fog image over 4 seconds */
+            animation-timing-function: ease-out;
+            animation-iteration-count: 1;
+        }
+
+        @keyframes fadeOut {
+            0% {
+                opacity: 1; /* Fully opaque at the start */
+            }
+            100% {
+                opacity: 0; /* Completely transparent at the end */
+            }
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+        nav {
+            background-color: #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+        nav a {
+            text-decoration: none;
+            color: #333;
+            padding: 10px;
+            margin: 0 5px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        nav a:hover {
+            background-color: #666;
+            color: #fff;
+        }
+        .container {
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            padding: 20px;
+        }
+        .section {
+            background-color: rgba(101, 124, 192, 0.8);
+            border-radius: 10px;
+            padding: 80px;
+            margin: 20px;
+            flex-basis: 100%;
+            text-align: center;
+            height: 100vh;
+            overflow-y: auto;
+            position: relative;
+        }
+        .box {
+            background-color: rgb(0, 128, 73);
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 5px;
+            margin: 20px auto 0;
+            width: 70%;
+            max-width: 300px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+        .box:nth-child(n+2) {
+            margin-top: 20px;
+        }
+        .box:hover {
+            transform: translateY(-5px);
+        }
+        h2, h3 {
+            color: #fff;
+        }
+        .info-container {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 10px 0;
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            z-index: 1;
+        }
+        .info {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+        .pollutant-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .pollutant {
+            background-color: rgb(0, 128, 73);
+            border-radius: 10px;
+            padding: 15px;
+            width: 80%;
+            text-align: center;
+            margin-bottom: 80px;
+            max-height: 150px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            align-items: center;
+            transition: transform 0.3s ease;
+        }
+
+        .pollutant h4 {
+            margin-bottom: 5px;
+            color: #fff;
+        }
+
+        .pollutant p {
+            margin: 0;
+            color: #fff;
+        }
+        /* Table styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 5px; /* Add margin to the top of the table */
+            color: black;
+        }
+
+        th, td {
+            padding: 0px;
+            text-align: left;
+            margin: 0; /* Remove default margin for table cells */
+            border-bottom: 0px solid rgb(99, 92, 92); /* Add horizontal line between rows */
+        }
+
+        th {
+            background-color: rgb(163, 183, 246);
+            color: black;
+            padding: 0px 0px; /* Adjusted padding */
+            border-right: 0px solid black; /* Add border between columns */
+            border-top: 0px solid black; /* Add horizontal line before heading */
+        }
+
+        td {
+            border-right: 0px solid rgb(53, 51, 51); /* Add border between columns */
+        }
+        /* Row colors based on air quality levels */
+        tr.good {
+            background-color: #4CAF50; /* Green */
+        }
+
+        tr.satisfactory {
+            background-color: #FFFF00; /* Yellow */
+        }
+
+        tr.moderate {
+            background-color: #ffcc00; /* Orange */
+        }
+
+        tr.poor {
+            background-color: #FFA500; /* Orange */
+        }
+
+        tr.verypoor {
+            background-color: hwb(22 0% 0%); /* Light Red */
+        }
+
+        tr.worst {
+            background-color: #FF0000; /* Red */
+        }
+        tr > td:first-child {
+            font-weight: bold;
+        }
+        .iframe-container {
+            width: 100%;
+            overflow: hidden;
+            padding-top: 56.25%; /* Aspect ratio */
+            position: relative;
+        }
+
+        .iframe-container iframe {
+            border: 0;
+            height: 130%;
+            left: 0;
+            position: absolute;
+            top: 0;
+            width: 110%;
+            transform: scale(0.8); /* Scale down the iframe */
+            padding-left: 10px;
+            transform-origin: 0 0; /* Ensure it scales from the top-left corner */
+        }
+        .button-container {
+            position: absolute;
+            bottom: 5px;
+            left: 50px;
+            text-align: left;
+        }
+
+        .button-container button {
+            background-color: #333;
+            color: #fff;
+            padding: 20px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .button-container button:hover {
+            background-color: #666;
+        }
+
+        .details {
+            display: none;
+            color: black;
+            position: absolute;
+            bottom: -200px;
+            left: 150px;
+            text-align: center;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0, 0, 0);
+            background-color: rgba(0, 0, 0, 0.4);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 300px;
+            text-align: center;
+            border-radius: 4px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .btn-modal {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 10px;
+        }
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+        }
+        .container {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px;
+        }
+
+        .left, .right {
+            width: 45%;
+        }
+
+        .left {
+            width: 45%;
+            padding: 200px;
+        }
+
+        .right {
+            width: 45%;
+            padding: 100px;
+        }
+        .catchy-info {
+            flex-basis: 45%;
+        }
+        .catchy-info h2 {
+            color: black;
+        }
+
+        .what-to-do {
+            flex-basis: 30%;
+        }
+
+        .what-to-do ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .what-to-do h2 {
+            color: black;
+        }
+        .what-to-do ul li {
+            margin-bottom: 10px;
+        }
+        .white-boxes-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            position: absolute;
+            bottom: 100px;
+            right: 10px;
+        }
+
+        .white-box {
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 8px;
+            width: 40%;
+            margin-right: 10px;
+        }
+
+        .white-box h3 {
+            margin-top: 0;
+            color: black;
+        }
+
+        .white-box p {
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="anim-body">
+        <div class="fog-anim">
+        </div>
+        <header>
+            <h1>Air Pollution Monitoring System</h1>
+
+        </header>
+        <nav>
+            <a href="#" onclick="showSection('home')">Home</a>
+            <a href="#" onclick="showSection('about')">About</a>
+            <a href="#" onclick="showSection('chart')">Chart</a>
+            <a href="#" onclick="showRegisterOptions()">Register</a>
+        </nav>
+        <div class="container">
+            <!-- Home section -->
+            <div class="header-content">
+                <div class="catchy-info">
+                    <h2>Did You Know?</h2>
+                    <p id="catchy-info-text">Air pollution is a major environmental risk to health and is responsible for the premature death of millions of people worldwide each year. It is closely linked to climate change, affecting air quality and leading to various health issues.</p>
+                </div>
+                <div class="what-to-do">
+                    <h2>What Can You Do?</h2>
+                    <ul>
+                        <li id="what-to-do-item1">Reduce energy consumption</li>
+                        <li id="what-to-do-item2">Use public transportation or carpool</li>
+                        <li id="what-to-do-item3">Plant trees and support green spaces</li>
+                        <li id="what-to-do-item4">Support clean energy initiatives</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="right">
+                <div class="white-boxes-container">
+                    <div class="white-box">
+                        <h3>Reduce Emissions</h3>
+                        <p id="white-box-text1">Opt for public transport and reduce car usage to cut down on emissions.</p>
+                    </div>
+                    <div class="white-box">
+                        <h3>Energy Efficiency</h3>
+                        <p id="white-box-text2">Switch to energy-efficient appliances and lighting to save energy.</p>
+                    </div>
+                    <div class="white-box">
+                        <h3>Plant Trees</h3>
+                        <p id="white-box-text3">Plant trees in your community to help absorb CO2 and improve air quality.</p>
+                    </div>
+                    <div class="white-box">
+                        <h3>Support Green Initiatives</h3>
+                        <p id="white-box-text4">Participate in or donate to organizations working towards cleaner air.</p>
+                    </div>
+                </div>
+            </div>
+
+        <div class="section" id="home" style="display:none;">
+            <div class="info-container" id="location-time">
+                <div class="info" id="location"></div>
+                <div class="info" id="time"></div>
+            </div>
+            <div class="box" style="margin-bottom: 40px;">
+                <h2>Air Quality Index (AQI)</h2>
+                <br></br>
+                <p>Temperature</p>
+                <div class="iframe-container">
+                    <iframe src="https://thingspeak.com/channels/2543851/widgets/862125"></iframe>
+                </div>
+                <br></br>
+                <p>Air Quality Level</p>
+                <div class="iframe-container">
+                    <iframe src="https://thingspeak.com/channels/2543851/widgets/862131"></iframe>
+                </div>
+            </div>
+        <div class="box" style="margin-bottom: 40px;">
+                <h2>Pollutants</h2>
+                <!-- Insert pollutants levels here -->
+                <div class="pollutant-box">
+                    <div class="pollutant" id="benzene">
+                        <h4>Benzene</h4>
+                        <p id="benzene-value">--</p>
+                    </div>
+                    <div class="pollutant" id="nh3">
+                        <h4>NH3</h4>
+                        <p id="NH3-value">--</p>
+                    </div>
+                    <div class="pollutant" id="sulphur">
+                        <h4>Sulphur</h4>
+                        <p id="Sulphur-value">--</p>
+                    </div>
+                    <div class="pollutant" id="co2">
+                        <h4>CO2</h4>
+                        <p id="CO2-value">--</p>
+                    </div>
+                </div>
+            </div>
+            <div class="box" style="margin-bottom: 40px;">
+                <h2>Weather</h2>
+                <!-- Insert weather data here -->
+                <br></br>
+                <div class="pollutant-box">
+                    <div class="pollutant" id="temperature">
+                        <h4>Temperature</h4>
+                        <p id="temperature-value">--</p>
+                    </div>
+                    <div class="pollutant" id="moisture">
+                        <h4>Moisture</h4>
+                        <p id="moisture-value">--</p>
+                    </div>
+                    <div class="pollutant" id="airquality">
+                        <h4>Air Quality</h4>
+                        <p id="airquality-value">--</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+</div>
+<!-- Report section -->
+<div id="auth-modal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <p>Do you want to Login or Sign up?</p>
+        <button class="btn-modal" onclick="redirectTo('/login')">Login</button>
+        <button class="btn-modal" onclick="redirectTo('/signup')">Sign Up</button>
+    </div>
+</div>
+</div>
+<div class="section" id="report" style="display:none;">
+    
+</div>
+<!-- About section -->
+<div class="section" id="about" style="display:none;">
+    <table>
+        <tr>
+            <th></th> <!-- Empty cell for spacing -->
+            <th>Air quality</th>
+            <th>AQI Index</th>
+            <th>Description</th>
+        </tr>
+        <tr class="good">
+            <td class="line"></td> <!-- Vertical line -->
+            <td>Good</td>
+            <td>0 - 50</td>
+            <td>Air quality is considered satisfactory, and air pollution poses little or no risk.</td>
+        </tr>
+        <tr class="satisfactory">
+            <td class="line"></td> <!-- Vertical line -->
+            <td>Satisfactory</td>
+            <td>51 - 100</td>
+            <td>Air quality is acceptable; however, there may be some pollutants that may pose a moderate health concern.</td>
+        </tr>
+        <tr class="moderate">
+            <td class="line"></td> <!-- Vertical line -->
+            <td>Moderate</td>
+            <td>101 - 200</td>
+            <td>Air quality is acceptable; however, there may be some pollutants that may pose a moderate health concern.</td>
+        </tr>
+        <tr class="poor">
+            <td class="line"></td> <!-- Vertical line -->
+            <td>Poor</td>
+            <td>201 - 300</td>
+            <td>Air quality is considered unhealthy for sensitive groups, and people with respiratory or heart conditions may experience health effects.</td>
+        </tr>
+        <tr class="verypoor">
+            <td class="line"></td> <!-- Vertical line -->
+            <td>Very Poor</td>
+            <td>301 - 400</td>
+            <td>Air quality is considered unhealthy, and everyone may experience health effects; sensitive groups may experience more serious health effects.</td>
+        </tr>
+        <tr class="worst">
+            <td class="line"></td> <!-- Vertical line -->
+            <td>Worst</td>
+            <td>401 - 500</td>
+            <td>Air quality is considered hazardous, and everyone may experience more serious health effects.</td>
+        </tr>
+        
+    </table>
+    <div class="button-container">
+        <button onclick="showDetails('good')">Good</button>
+        <button onclick="showDetails('satisfactory')">Satisfactory</button>
+        <button onclick="showDetails('moderate')">Moderate</button>
+        <button onclick="showDetails('poor')">Poor</button>
+        <button onclick="showDetails('verypoor')">Very Poor</button>
+        <button onclick="showDetails('severe')">Severe</button>
+    </div>
+    
+    <div id="good" class="details">
+        <h2>Good</h2>
+    <p><strong>Description:</strong> Air quality is good and air pollution poses no risk.</p>
+    <p><strong>Who needs concern:</strong> Nobody needs to be concerned.</p>
+    <p><strong>Health effects:</strong> No health effects seen.</p>
+    <p><strong>What to do:</strong> It’s a great day to be active outside.</p>
+    </div>
+    <div id="satisfactory" class="details">
+        <h2>Satisfactory</h2>
+        <p><strong>Description:</strong> Air quality is acceptable. However, there may be a risk for some people, particularly those who are unusually sensitive to air pollution.</p>
+        <p><strong>Who needs concern:</strong> People who are unusually sensitive to air pollution.</p>
+        <p><strong>Health effects:</strong> Possible minor respiratory discomfort for sensitive individuals.</p>
+        <p><strong>What to do:</strong> Consider reducing prolonged or heavy exertion if you are sensitive.</p>
+    </div>
+    
+    <div id="moderate" class="details">
+        <h2>Moderate</h2>
+        <p><strong>Description:</strong> Members of sensitive groups may experience health effects. The general public is less likely to be affected.</p>
+        <p><strong>Who needs concern:</strong> Sensitive groups.</p>
+        <p><strong>Health effects:</strong> Respiratory symptoms in sensitive individuals, general public unlikely to be affected.</p>
+        <p><strong>What to do:</strong> Reduce outdoor activities if you are sensitive.</p>
+    </div>
+    
+    <div id="poor" class="details">
+        <h2>Poor</h2>
+        <p><strong>Description:</strong> Some members of the general public may experience health effects; members of sensitive groups may experience more serious health effects.</p>
+        <p><strong>Who needs concern:</strong> General public and sensitive groups.</p>
+        <p><strong>Health effects:</strong> Increased likelihood of respiratory symptoms in sensitive groups.</p>
+        <p><strong>What to do:</strong> Limit outdoor exertion, especially for sensitive groups.</p>
+    </div>
+    
+    <div id="verypoor" class="details">
+        <h2>Very Poor</h2>
+        <p><strong>Description:</strong> Health alert: The risk of health effects is increased for everyone.</p>
+        <p><strong>Who needs concern:</strong> Everyone.</p>
+        <p><strong>Health effects:</strong> Significant increase in respiratory effects.</p>
+        <p><strong>What to do:</strong> Avoid outdoor activities.</p>
+    </div>
+    
+    <div id="severe" class="details">
+        <h2>Severe</h2>
+        <p><strong>Description:</strong> Health warning of emergency conditions: everyone is more likely to be affected.</p>
+        <p><strong>Who needs concern:</strong> Everyone.</p>
+        <p><strong>Health effects:</strong> Serious risk of respiratory effects.</p>
+        <p><strong>What to do:</strong> Stay indoors and limit physical activity.</p>
+    </div>
+</div>
+    
+<div class="section" id="chart" style="display:none;">
+    <div class="chart-container" style="display: flex;">
+        <iframe width="450" height="260" style="border: 1px solid #cccccc; margin-right: 10px;" src="https://thingspeak.com/channels/2543851/charts/3?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=60&title=Time+vs+Air+Quality&type=line&xaxis=Time&yaxis=Air+Quality"></iframe>
+        <iframe width="450" height="260" style="border: 1px solid #cccccc; margin-right: 10px;" src="https://thingspeak.com/channels/2543851/charts/2?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=60&title=Time+vs+Moisture&type=line&xaxis=Time&yaxis=Moisture"></iframe>
+        <iframe width="450" height="260" style="border: 1px solid #cccccc; margin-right: 10px;" src="https://thingspeak.com/channels/2543851/charts/1?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=60&title=Time+vs+Temperature&type=line&xaxis=Time&yaxis=Temperature"></iframe>
+        
+    </div>
+</div>
+    <script>
+        function typeWriter(element, text, speed) {
+                    let index = 0;
+                    function addLetter() {
+                        if (index < text.length) {
+                            element.innerHTML += text.charAt(index);
+                            index++;
+                            setTimeout(addLetter, speed);
+                        }
+                    }
+                    addLetter();
+                }
+
+                document.addEventListener('DOMContentLoaded', function () {
+                    // Catchy info text
+                    const catchyInfoElement = document.getElementById('catchy-info-text');
+                    const catchyInfoText = catchyInfoElement.innerText;
+                    catchyInfoElement.innerText = '';
+                    typeWriter(catchyInfoElement, catchyInfoText, 25);
+
+                    // What to do items
+                    const whatToDoItems = [
+                        { id: 'what-to-do-item1', text: document.getElementById('what-to-do-item1').innerText },
+                        { id: 'what-to-do-item2', text: document.getElementById('what-to-do-item2').innerText },
+                        { id: 'what-to-do-item3', text: document.getElementById('what-to-do-item3').innerText },
+                        { id: 'what-to-do-item4', text: document.getElementById('what-to-do-item4').innerText }
+                    ];
+
+                    whatToDoItems.forEach((item, index) => {
+                        const element = document.getElementById(item.id);
+                        element.innerText = '';
+                        setTimeout(() => {
+                            typeWriter(element, item.text, 50);
+                        }, index * 1000); // Delay each item
+                    });
+
+                    // White box texts
+                    const whiteBoxTexts = [
+                        { id: 'white-box-text1', text: document.getElementById('white-box-text1').innerText },
+                        { id: 'white-box-text2', text: document.getElementById('white-box-text2').innerText },
+                        { id: 'white-box-text3', text: document.getElementById('white-box-text3').innerText },
+                        { id: 'white-box-text4', text: document.getElementById('white-box-text4').innerText }
+                    ];
+
+                    whiteBoxTexts.forEach((item, index) => {
+                        const element = document.getElementById(item.id);
+                        element.innerText = '';
+                        setTimeout(() => {
+                            typeWriter(element, item.text, 50);
+                        }, index * 2000); // Delay each item
+                    });
+                });
+        function redirectTo(url) {
+    window.location.href = url;
+}        
+        // Function to show the home section and hide others
+        function showHome() {
+            document.getElementById('home').style.display = "flex";
+            document.getElementById('report').style.display = "none";
+            document.getElementById('chart').style.display = "none";
+            document.getElementById('about').style.display = "none";
+            document.getElementById('register').style.display = "none";
+            updateLocationTime();
+        }
+        function showRegisterOptions() {
+            document.getElementById('auth-modal').style.display = 'flex';
+  }
+
+    function closeModal() {
+    document.getElementById('auth-modal').style.display = 'none';
+  }
+        // Function to show a specific section and hide others
+        function showSection(sectionId) {
+    // Hide all sections
+    const sections = document.querySelectorAll('.section');
+    sections.forEach(section => section.style.display = 'none');
+
+    // Show the selected section
+    const section = document.getElementById(sectionId);
+    if (section) {
+        section.style.display = 'flex';
+        // Scroll to the section
+        section.scrollIntoView({ behavior: 'smooth' });
+        if (sectionId === 'home') {
+            updateLocationTime(); // Call updateLocationTime() when the "Home" section is displayed
+        }
+    }
+}
+        // Function to update location and time information
+        function updateLocationTime() {
+            // Get the current location using HTML5 Geolocation API
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition);
+            } else {
+                document.getElementById('location').innerText = "Location: Geolocation is not supported by this browser.";
+            }
+            
+            // Get the current time
+            var now = new Date();
+            var timeString = "Time: " + now.toLocaleTimeString();
+            document.getElementById('time').innerText = timeString;
+        }
+        // Function to show current position
+        function showPosition(position) {
+            var latitude = position.coords.latitude;
+            var longitude = position.coords.longitude;
+
+            // Reverse geocoding to get human-readable address
+            var url = "https://nominatim.openstreetmap.org/reverse?format=json&lat=" + latitude + "&lon=" + longitude;
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    var location = "";
+                    if (data.address) {
+                        if (data.address.road) {
+                            location += data.address.road + ", ";
+                        }
+                        if (data.address.city) {
+                            location += data.address.city + ", ";
+                        }
+                        if (data.address.state) {
+                            location += data.address.state;
+                        }
+                    }
+                    if (location === "") {
+                        document.getElementById('location').innerText = "Location: Unknown";
+                    } else {
+                        document.getElementById('location').innerText = "Location: " + location;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching location:', error);
+                    document.getElementById('location').innerText = "Location: Unable to fetch location";
+                });
+        }
+window.onload = function() {
+            setTimeout(function() {
+                document.querySelector('.fog-anim').style.display = "none";
+                document.getElementById('home').style.display = "none";
+                document.getElementById('report').style.display = "none";
+                document.getElementById('about').style.display = "none";
+                updateLocationTime();
+            }, 5000); // Adjust the duration as needed
+        };
+// Function to fetch data from ThingSpeak and update HTML elements
+function fetchDataAndUpdate() {
+    fetch('https://api.thingspeak.com/channels/2543851/feeds.json?results=1')
+        .then(response => response.json())
+        .then(data => {
+            // Extract temperature, moisture, and air quality from the fetched data
+            const feed = data.feeds[0];
+            const temperature = feed.field1;
+            const moisture = feed.field2;
+            const airQuality = feed.field3;
+            const Benzene=feed.field5;
+            const NH3=feed.field4;
+            const CO2=feed.field6;
+            const Sul=feed.field7;
+            // Update HTML elements with the fetched values
+            document.getElementById('temperature-value').innerText = temperature + " °C";
+            document.getElementById('moisture-value').innerText = moisture + " %";
+            document.getElementById('airquality-value').innerText = airQuality+" ppm";
+            document.getElementById('benzene-value').innerText = Benzene+" μg/m³";
+            document.getElementById('NH3-value').innerText = NH3+" μg/m³";
+            document.getElementById('CO2-value').innerText = CO2+" μg/m³";
+            document.getElementById('Sulphur-value').innerText = Sul+" μg/m³";
+            // Optionally, update the time of the last update
+            const lastUpdate = new Date(feed.created_at);
+            document.getElementById('time').innerText = "Last Updated: " + lastUpdate.toLocaleString();
+        })
+        .catch(error => {
+            console.error('Error fetching data from ThingSpeak:', error);
+        });
+}
+
+// Function to update data periodically
+function updateDataPeriodically() {
+    // Update data initially
+    fetchDataAndUpdate();
+
+    // Update data every 5 minutes (adjust interval as needed)
+    setInterval(fetchDataAndUpdate, 5 * 60 * 1000); // 5 minutes in milliseconds
+}
+
+// Automatically update data periodically when the page loads
+window.onload = function() {
+    // Hide fog animation after 5 seconds
+    setTimeout(function() {
+        document.querySelector('.fog-anim').style.display = "none";
+        document.getElementById('home').style.display = "none";
+        document.getElementById('report').style.display = "none";
+        document.getElementById('about').style.display = "none";
+        updateDataPeriodically(); // Start periodic data updates
+    }, 5000); // Adjust the duration as needed
+};
+function showDetails(level) {
+            // Hide all details
+            const details = document.querySelectorAll('.details');
+            details.forEach(detail => detail.style.display = 'none');
+            
+            // Show the selected details
+            const detail = document.getElementById(level);
+            if (detail) {
+                detail.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>
 
