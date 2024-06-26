@@ -17,20 +17,8 @@ USB Cable<br>
 
 **Reqiurements**:
 
-1.	Hardware Setup:<br>
-•	Connect the NodeMCU ESP8266 with MQ135 and other sensors.<br>
-•	Program the NodeMCU using Arduino IDE to read sensor data and send it to ThingSpeak.<br>
-2.	Cloud Integration:<br>
-•	Create ThingSpeak account.<br>
-•	Set up ThingSpeak channels for data collection.<br>
-•	Configure the NodeMCU to transmit data to ThingSpeak.<br>
-4.	Web Development:<br>
-•	Develop the frontend for the web application.<br>
-•	Implement backend services for data fetching, user authentication, and alert management.<br>
-•	Integrate ThingSpeak API to fetch and display data.<br>
-5.	User Alerts:<br>
 •	Set up email services for sending alerts.<br>
-•	Implement backend logic to monitor data and trigger alerts.<br>
+More details refer requirement.txt
 
 **Connections**:
 
